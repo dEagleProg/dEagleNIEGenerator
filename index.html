@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор NIE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            transition: all 0.3s ease;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #5e2b82;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            color: white;
+            background: linear-gradient(45deg, #8c4ad1, #9a67f4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #9a67f4, #8c4ad1);
+            transform: translateY(-3px);
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .valid {
+            color: #4CAF50;
+        }
+        .invalid {
+            color: #e74c3c;
+        }
+        .additional-buttons button {
+            width: 48%;
+            margin: 10px 1%;
+        }
+        #notification {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Генератор NIE <br> by dEagle</h1>
+    <button onclick="generateNIE()">Сгенерировать NIE</button>
+
+    <div class="additional-buttons">
+        <button onclick="clearFields()">Очистить поля</button>
+        <button onclick="copyNIE()">Копировать NIE</button>
+    </div>
+
+    <div id="result" class="result"></div>
+    <div id="notification"></div>
+</div>
+
+<script>
+    function calculateControlLetter(number) {
+        const letters = 'TRWAGMYFPDXBNJZSQVHLCKE';
+        return letters[number % 23];
+    }
+
+    function generateNIE() {
+        const firstLetter = ['X', 'Y', 'Z'][Math.floor(Math.random() * 3)];
+        const digits = ('0000000' + Math.floor(Math.random() * 10000000)).slice(-7);
+        let number = parseInt(digits);
+
+        if (firstLetter === 'Y') {
+            number += 10000000;
+        } else if (firstLetter === 'Z') {
+            number += 20000000;
+        }
+
+        const controlLetter = calculateControlLetter(number);
+        const nie = `${firstLetter}${digits}${controlLetter}`;
+
+        document.getElementById('result').textContent = `Сгенерированный NIE: ${nie}`;
+        document.getElementById('result').className = 'result valid';
+    }
+
+    function clearFields() {
+        document.getElementById('result').textContent = '';
+    }
+
+    function copyNIE() {
+        const nieText = document.getElementById('result').textContent;
+        if (nieText.includes('Сгенерированный NIE:')) {
+            navigator.clipboard.writeText(nieText.replace('Сгенерированный NIE: ', '')).then(() => {
+                showNotification('NIE скопирован в буфер обмена');
+            });
+        } else {
+            alert('Нет сгенерированного NIE для копирования');
+        }
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000); // Сообщение исчезнет через 3 секунды
+    }
+</script>
+
+</body>
+</html>
