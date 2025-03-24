@@ -3,170 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Генератор NIE by dEagle</title>
+    <title>dEagle NIE Генератор</title>
     <style>
+        :root {
+            --primary: #5d49e8;
+            --primary-dark: #4338ca;
+            --secondary: #22d3ee;
+            --dark: #111827;
+            --light: #f9fafb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            touch-action: manipulation; /* Устанавливает ограничение на случайное увеличение при двойном касании */
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f7;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-            transition: all 0.3s ease;
-        }
-        h1 {
-            margin-bottom: 20px;
-            color: #5e2b82;
-            font-size: 24px;
-            line-height: 1.3;
-        }
-        h1 br {
-            display: none;
+            padding: 20px;
+            touch-action: pan-x pan-y;
         }
 
-        button {
+        .container {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 25px;
-            border: none;
-            font-size: 16px;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 28px;
+        }
+
+        .nie-display {
+            position: relative;
+            background-color: var(--light);
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            word-break: break-all;
+            min-height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nie-display:hover {
+            border-color: var(--primary);
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary);
             color: white;
-            background: linear-gradient(45deg, #8c4ad1, #9a67f4);
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        button:hover {
-            background: linear-gradient(45deg, #9a67f4, #8c4ad1);
-            transform: translateY(-3px);
-        }
-        .result {
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        .valid {
-            color: #4CAF50;
-        }
-        .invalid {
-            color: #e74c3c;
-        }
-        .additional-buttons button {
-            width: 48%;
-            margin: 10px 1%;
-        }
-        #notification {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
-            font-weight: bold;
+
+        .copy-btn:hover {
+            background-color: var(--primary-dark);
         }
 
-        /* Медиазапросы для адаптивности */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 20px;
-            }
+        .copy-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .controls {
+            margin-bottom: 25px;
+        }
+
+        .control-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: var(--dark);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        #copyBtnFull:hover {
+            background-color: #0ea5e9;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 500px) {
             .container {
                 padding: 20px;
-                width: 90%;
-                max-width: 360px;
             }
-        }
 
-        @media (max-width: 480px) {
             h1 {
-                font-size: 18px;
+                font-size: 24px;
+                margin-bottom: 20px;
             }
-            .container {
+
+            .nie-display {
+                font-size: 16px;
                 padding: 15px;
-                width: 90%;
-                max-width: 350px;
             }
-            .additional-buttons button {
-                width: 100%;
-                margin: 5px 0;
+
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .switch {
+                margin-top: 5px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Генератор NIE Испании <br> by dEagle</h1>
 
-<div class="container">
-    <h1>Генератор NIE <br> by dEagle</h1>
-    <button onclick="generateNIE()">Сгенерировать NIE</button>
+        <div class="nie-display" id="nieDisplay">
+            Нажмите кнопку для генерации
+            <button class="copy-btn" id="copyBtn" title="Копировать NIE">
+                <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+            </button>
+        </div>
 
-    <div class="additional-buttons">
-        <button onclick="clearFields()">Очистить поля</button>
-        <button onclick="copyNIE()">Копировать NIE</button>
+        <div class="controls">
+            <div class="control-group">
+                <label for="includeX">Начинать с X</label>
+                <label class="switch">
+                    <input type="checkbox" id="includeX" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label for="includeY">Начинать с Y</label>
+                <label class="switch">
+                    <input type="checkbox" id="includeY" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label for="includeZ">Начинать с Z</label>
+                <label class="switch">
+                    <input type="checkbox" id="includeZ" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="btn" id="generateBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 2v6h-6"></path>
+                <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
+            </svg>
+            Сгенерировать NIE
+        </button>
+
+        <button class="btn" id="copyBtnFull" style="margin-top: 15px; background-color: var(--secondary);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Копировать NIE в буфер обмена
+        </button>
     </div>
 
-    <div id="result" class="result"></div>
-    <div id="notification"></div>
-</div>
+    <div class="toast" id="toast">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        NIE скопирован!
+    </div>
 
-<script>
-    function calculateControlLetter(number) {
-        const letters = 'TRWAGMYFPDXBNJZSQVHLCKE';
-        return letters[number % 23];
-    }
+    <script>
+        const nieDisplay = document.getElementById('nieDisplay');
+        const includeX = document.getElementById('includeX');
+        const includeY = document.getElementById('includeY');
+        const includeZ = document.getElementById('includeZ');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyBtnFull = document.getElementById('copyBtnFull');
+        const toast = document.getElementById('toast');
 
-    function generateNIE() {
-        const firstLetter = ['X', 'Y', 'Z'][Math.floor(Math.random() * 3)];
-        const digits = ('0000000' + Math.floor(Math.random() * 10000000)).slice(-7);
-        let number = parseInt(digits);
+        const controlLetters = 'TRWAGMYFPDXBNJZSQVHLCKE';
 
-        if (firstLetter === 'Y') {
-            number += 10000000;
-        } else if (firstLetter === 'Z') {
-            number += 20000000;
+        function generateNIE() {
+            let prefixOptions = [];
+            if (includeX.checked) prefixOptions.push('X');
+            if (includeY.checked) prefixOptions.push('Y');
+            if (includeZ.checked) prefixOptions.push('Z');
+
+            if (prefixOptions.length === 0) {
+                includeX.checked = true;
+                prefixOptions.push('X');
+            }
+
+            const prefix = prefixOptions[Math.floor(Math.random() * prefixOptions.length)];
+            const number = Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
+            const prefixValue = { 'X': 0, 'Y': 1, 'Z': 2 }[prefix];
+            const fullNumber = prefixValue + number;
+            const remainder = parseInt(fullNumber) % 23;
+            const controlLetter = controlLetters[remainder];
+
+            const nie = prefix + number + controlLetter;
+            nieDisplay.textContent = nie;
+
+            nieDisplay.style.backgroundColor = '#e8f5e9';
+            setTimeout(() => {
+                nieDisplay.style.backgroundColor = '';
+            }, 300);
         }
 
-        const controlLetter = calculateControlLetter(number);
-        const nie = `${firstLetter}${digits}${controlLetter}`;
+        generateBtn.addEventListener('click', generateNIE);
+        generateNIE();
 
-        document.getElementById('result').textContent = `Сгенерированный NIE: ${nie}`;
-        document.getElementById('result').className = 'result valid';
-    }
-
-    function clearFields() {
-        document.getElementById('result').textContent = '';
-    }
-
-    function copyNIE() {
-        const nieText = document.getElementById('result').textContent;
-        if (nieText.includes('Сгенерированный NIE:')) {
-            navigator.clipboard.writeText(nieText.replace('Сгенерированный NIE: ', '')).then(() => {
-                showNotification('NIE скопирован в буфер обмена');
-            });
-        } else {
-            alert('Нет сгенерированного NIE для копирования');
+        function copyNIEToClipboard() {
+            const nie = nieDisplay.textContent;
+            if (nie && nie !== 'Нажмите кнопку для генерации') {
+                navigator.clipboard.writeText(nie).then(() => {
+                    showToast();
+                });
+            }
         }
-    }
 
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.style.display = 'block';
+        copyBtn.addEventListener('click', copyNIEToClipboard);
+        copyBtnFull.addEventListener('click', copyNIEToClipboard);
 
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000); // Сообщение исчезнет через 3 секунды
-    }
-</script>
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
 
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function (event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    </script>
 </body>
 </html>
