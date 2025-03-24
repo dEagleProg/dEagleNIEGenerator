@@ -6,14 +6,14 @@
     <title>dEagle NIE Генератор</title>
     <style>
         :root {
-            --primary: #5d49e8;
-            --primary-dark: #4338ca;
-            --secondary: #22d3ee;
-            --dark: #111827;
-            --light: #f9fafb;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --primary: #F28C82; /* Мягкий коралловый (красный флага Испании) */
+            --primary-dark: #E07B73; /* Темнее для hover */
+            --secondary: #F9E4B7; /* Кремовый желтый (желтый флага Испании) */
+            --dark: #3A2E2A; /* Темно-коричневый для текста */
+            --light: #FDF8F2; /* Очень светлый кремовый для фона */
+            --success: #A8D5BA; /* Мягкий зеленый для уведомлений */
+            --warning: #F9C97C; /* Теплый оранжевый */
+            --danger: #E57373; /* Мягкий красный для ошибок */
         }
 
         * {
@@ -24,7 +24,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            background: linear-gradient(135deg, #FDF8F2 0%, #F9E4B7 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -58,7 +58,7 @@
         .nie-display {
             position: relative;
             background-color: var(--light);
-            border: 2px solid #e5e7eb;
+            border: 2px solid #EDEAE5;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 25px;
@@ -142,7 +142,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #e5e7eb;
+            background-color: #EDEAE5;
             transition: .4s;
             border-radius: 34px;
         }
@@ -190,7 +190,7 @@
         }
 
         #copyBtnFull:hover {
-            background-color: #0ea5e9;
+            background-color: #F7D98A; /* Темнее кремового для hover */
         }
 
         .btn:active {
@@ -344,7 +344,7 @@
             const nie = prefix + number + controlLetter;
             nieDisplay.textContent = nie;
 
-            nieDisplay.style.backgroundColor = '#e8f5e9';
+            nieDisplay.style.backgroundColor = '#FFF3E8';
             setTimeout(() => {
                 nieDisplay.style.backgroundColor = '';
             }, 300);
