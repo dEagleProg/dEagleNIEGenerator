@@ -36,6 +36,48 @@
             position: relative;
         }
 
+        .lang-switcher {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+
+        .lang-select {
+            background-color: var(--secondary);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%233A2E2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 25px;
+            width: 100%;
+            max-width: 150px;
+        }
+
+        .lang-select:hover {
+            background-color: var(--primary);
+            color: white;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        }
+
+        .lang-select:focus {
+            outline: none;
+            background-color: var(--primary);
+            color: white;
+        }
+
         .container {
             width: 100%;
             max-width: 500px;
@@ -235,48 +277,6 @@
             opacity: 1;
         }
 
-        .lang-switcher {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            max-width: 500px;
-            z-index: 1;
-        }
-
-        .lang-select {
-            background-color: var(--secondary);
-            color: var(--dark);
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%233A2E2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            padding-right: 25px;
-            width: 100%;
-            max-width: 150px;
-        }
-
-        .lang-select:hover {
-            background-color: var(--primary);
-            color: white;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-        }
-
-        .lang-select:focus {
-            outline: none;
-            background-color: var(--primary);
-            color: white;
-        }
-
         @media (max-width: 500px) {
             .container {
                 padding: 20px;
@@ -303,7 +303,7 @@
             }
 
             .lang-switcher {
-                margin-top: 15px;
+                margin-bottom: 10px;
             }
 
             .lang-select {
@@ -315,6 +315,15 @@
     </style>
 </head>
 <body>
+    <div class="lang-switcher">
+        <select class="lang-select" id="langSelect">
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+            <option value="ru">RU</option>
+            <option value="ua">UA</option>
+        </select>
+    </div>
+
     <div class="container">
         <h1 id="title"></h1>
 
@@ -370,15 +379,6 @@
             </svg>
             <span id="copyBtnText"></span>
         </button>
-    </div>
-
-    <div class="lang-switcher">
-        <select class="lang-select" id="langSelect">
-            <option value="en">EN</option>
-            <option value="es">ES</option>
-            <option value="ru">RU</option>
-            <option value="ua">UA</option>
-        </select>
     </div>
 
     <div class="toast" id="toast">
